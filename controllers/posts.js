@@ -8,7 +8,7 @@ const router = express.Router();
 export const getPosts = async (req, res) => { 
     try {
         const postMessages = await PostMessage.find();
-        console.log(postMessages);
+        // console.log(postMessages);
         res.status(200).json(postMessages);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -27,17 +27,39 @@ export const getPost = async (req, res) => {
     }
 };
 
+// export const createPost = async (req, res) => {
+//     const post = req.body;
+//     const newPost = new PostMessage(post);
+//     try {
+//         await newPost.save();
+//         res.status(201).json(newPost );
+//         console.log(newPost);
+//     } catch (error) {
+//         res.status(409).json({ message: error.message });
+//         console.log(error.message);
+//     }
+// };
+
+
 export const createPost = async (req, res) => {
-    const post = req.body;
-    const newPost = new PostMessage(post);
-    try {
-        await newPost.save();
-        res.status(201).json(newPost );
-        console.log(newPost);
-    } catch (error) {
-        res.status(409).json({ message: error.message });
-        console.log(error.message);
-    }
+    console.log("new post created")
+    const postData = new PostMessage({
+        creator: req.body.creator,
+        title: req.body.title,
+        message: req.body.message,
+        tags: req.body.tags,
+        selectedFile: req.body.selectedFile,
+    })
+    postData.save()
+        // .then(data => {
+        //     res.json(data)
+        //     console.log(res.json(data))
+        //     // .then(res.status().json({userId: generatedUserId}))
+        // })
+        .catch(error => {
+            res.json(error)
+            console.log(error.message)
+        });
 };
 
 export const updatePost = async (req, res) => {
@@ -67,7 +89,8 @@ export const deletePost = async (req, res) => {
 
     await PostMessage.findByIdAndRemove(id);
 
-    res.json({ message: "Post deleted successfully." });
+    console.log(res.json({ message: "Post deleted successfully." }));
+    // console.log(res.json(message));
 };
 
 export const likePost = async (req, res) => {
@@ -80,6 +103,7 @@ export const likePost = async (req, res) => {
     const updatedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true });
     
     res.json(updatedPost);
+    console.log(res.json(updatedPost));
 };
 
 
