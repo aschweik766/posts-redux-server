@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', getPosts);
 router.post('/', createPost);
-router.patch('/:id', updatePost);
+router.put('/:id', updatePost);
 router.get('/:id', getPost);
 router.delete('/:id', deletePost);
 router.patch('/:id/likePost', likePost);
